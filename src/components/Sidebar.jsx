@@ -1,19 +1,28 @@
 import React from 'react';
-import { LogOut, Package, Plus, ShoppingCart } from 'lucide-react';
+import { LogOut, Package, Plus, ShoppingCart, X } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-export function Sidebar() {
+export function Sidebar({ onClose }) {
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // localStorage.removeItem('token');
-    // localStorage.removeItem('user');
+    localStorage.removeItem('token');
     navigate('/login');
   };
 
   return (
     <div className="flex fixed left-0 top-0 bottom-0 h-full w-72 flex-col border-r bg-black text-white">
+      {/* Close button for mobile */}
+      {onClose && (
+        <button 
+          onClick={onClose} 
+          className="md:hidden absolute top-4 right-4 text-white p-2 hover:bg-zinc-800 rounded"
+        >
+          <X className="h-5 w-5"/>
+        </button>
+      )}
+
       {/* Logo section */}
       <Link to={"/"} className="flex h-16 items-center gap-5 border-b border-zinc-800 px-4">
         <img
@@ -46,7 +55,7 @@ export function Sidebar() {
       <div className="border-t border-black hover:bg-zinc-900 p-4">
         <button 
           className="w-full flex items-center justify-start px-3 py-2 text-white rounded font-medium"
-          onClick={() => handleLogout()}
+          onClick={handleLogout}
         >
           <LogOut className="mr-5" />
           <p className='text-lg'>Logout</p>
@@ -69,4 +78,3 @@ function NavLink({ href, children, isActive, ...props }) {
     </Link>
   );
 }
-

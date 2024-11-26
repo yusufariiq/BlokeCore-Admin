@@ -7,14 +7,13 @@ export function Layout({ children }) {
 
   return (
     <div className="relative flex min-h-screen">
-      {/* Hidden on mobile, visible on desktop */}
-      <div className="hidden md:flex">
+      {/* Desktop Sidebar - Always visible on desktop */}
+      <div className="hidden md:block">
         <Sidebar />
       </div>
       
       {/* Main content */}
       <div className="flex-1">
-        
         {/* Mobile navbar */}
         <header className="flex px-4 py-5 items-center justify-between gap-4 border-b bg-black md:hidden">
           <div className="flex flex-row space-x-5 ">
@@ -36,17 +35,11 @@ export function Layout({ children }) {
         
         {/* Mobile sidebar */}
         <div 
-          className={`fixed inset-y-0 right-0 z-50 w-72 bg-black shadow-lg transform transition-transform duration-300 ease-in-out ${
+          className={`fixed inset-y-0 right-0 z-50 w-72 bg-zinc-950 shadow-lg transform transition-transform duration-300 ease-in-out ${
             isSidebarOpen ? 'translate-x-0' : 'translate-x-full'
           } md:hidden`}
         >
-          <button 
-                onClick={() => setIsSidebarOpen(false)}
-                className="absolute top-3 right-4 text-white p-2 hover:bg-zinc-800 rounded"
-              >
-                <X className="h-5 w-5"/>
-              </button>
-              <Sidebar />
+          <Sidebar onClose={() => setIsSidebarOpen(false)} />
         </div>
 
         {/* Overlay */}
@@ -58,9 +51,8 @@ export function Layout({ children }) {
         )}
         
         {/* Page content */}
-        <main className="flex-1 p-4">{children}</main>
+        <main className="flex-1 p-4 md:ml-72">{children}</main>
       </div>
     </div>
   );
 }
-

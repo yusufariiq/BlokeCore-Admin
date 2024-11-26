@@ -100,8 +100,7 @@ const Add = () => {
                   <label className="label">
                     <span className="label-text">Category</span>
                   </label>
-                  <select name="category" className="select select-bordered w-full" required>
-                    <option disabled selected>Select category</option>
+                  <select name="category" className="select select-bordered w-full" defaultValue={""} required>
                     <option value="men">Men</option>
                     <option value="women">Women</option>
                     <option value="kids">Kids</option>
@@ -112,11 +111,10 @@ const Add = () => {
                   <label className="label">
                     <span className="label-text">Sub Category</span>
                   </label>
-                  <select name="subCategory" className="select select-bordered w-full" required>
-                    <option disabled selected>Select sub-category</option>
-                    <option value="topwear">Clubs</option>
-                    <option value="bottomwear">Nations</option>
-                    <option value="footwear">Others</option>
+                  <select name="subCategory" className="select select-bordered w-full" defaultValue={""} required>
+                    <option value="clubs">Clubs</option>
+                    <option value="nations">Nations</option>
+                    <option value="others">Others</option>
                   </select>
                 </div>
 
@@ -147,8 +145,7 @@ const Add = () => {
                   <label className="label">
                     <span className="label-text">Condition</span>
                   </label>
-                  <select name="condition" className="select select-bordered w-full" required>
-                    <option disabled selected>Select condition</option>
+                  <select name="condition" className="select select-bordered w-full" defaultValue={""} required>
                     {CONDITIONS.map((condition) => (
                       <option key={condition} value={condition.toLowerCase()}>{condition}</option>
                     ))}
@@ -181,7 +178,7 @@ const Add = () => {
                         type="checkbox"
                         name="sizes"
                         value={size}
-                        className="hidden"
+                        className="hidden "
                         checked={selectedSizes.includes(size)}
                         onChange={(e) => {
                           if (e.target.checked) {
@@ -191,7 +188,7 @@ const Add = () => {
                           }
                         }}
                       />
-                      <span className={`btn btn-sm ${selectedSizes.includes(size) ? 'btn-primary' : 'btn-outline'}`}>
+                      <span className={`btn btn-sm ${selectedSizes.includes(size) ? 'bg-primary text-white hover:bg-hover-primary' : 'btn-outline'}`}>
                         {size}
                       </span>
                     </label>
@@ -202,19 +199,19 @@ const Add = () => {
               <div className="form-control">
                 <label className="label cursor-pointer">
                   <span className="label-text">Authentic Product</span> 
-                  <input type="checkbox" name="isAuthentic" className="checkbox" />
+                  <input type="checkbox" name="isAuthentic" className="checkbox checked:bg-primary" />
                 </label>
               </div>
               <div className="form-control">
                 <label className="label cursor-pointer">
                   <span className="label-text">Vintage Product</span> 
-                  <input type="checkbox" name="isVintage" className="checkbox" />
+                  <input type="checkbox" name="isVintage" className="checkbox checked:bg-primary" />
                 </label>
               </div>
               <div className="form-control">
                 <label className="label cursor-pointer">
                   <span className="label-text">Latest Product</span> 
-                  <input type="checkbox" name="isLatest" className="checkbox" />
+                  <input type="checkbox" name="isLatest" className="checkbox checked:bg-primary" />
                 </label>
               </div>
             </div>
