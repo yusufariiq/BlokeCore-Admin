@@ -1,16 +1,22 @@
 import './App.css'
-import { BrowserRouter as Router } from 'react-router-dom';
-import { Layout } from "./components/Layout";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Home from './pages/Home';
+import Add from './pages/Add';
+import List from './pages/List';
+import Orders from './pages/Orders';
+import Login from './components/Login';
+
 function App() {
 
   return (
     <Router>
-      <Layout>
-        <div className="flex flex-col gap-4">
-          <h1 className="text-2xl font-bold">Welcome to Dashboard</h1>
-          <p>Select an option from the sidebar to get started.</p>
-        </div>
-      </Layout>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/add" element={<Add />} />
+        <Route path="/list" element={<List />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/orders" element={<Orders />} />
+      </Routes>
     </Router>
   )
 }
