@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Layout } from '../components/Layout'
-import { Upload, X } from 'lucide-react'
+import { Upload, X, Loader2 } from 'lucide-react'
 import axios from 'axios'
 import { backendUrl } from '../App'
 import { toast } from 'react-hot-toast'
@@ -18,6 +18,7 @@ const Add = ({ token }) => {
   const [selectedSizes, setSelectedSizes] = useState([])
   const [selectedCategory, setSelectedCategory] = useState('');
   const [subcategories, setSubcategories] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const handleImageUpload = (index, event) => {
     const file = event.target.files[0]
@@ -70,8 +71,8 @@ const Add = ({ token }) => {
       // Structured details object
       const details = {
         year: form.year.value,
-        condition: formatCondition(form.condition.value), // Properly format condition
-        size: selectedSizes.length > 0 ? selectedSizes[0] : null, // Use first selected size
+        condition: formatCondition(form.condition.value),
+        size: selectedSizes,
         brand: form.brand.value,
         type: form.type.value,
         isAuthentic: form.isAuthentic.checked,
@@ -93,9 +94,6 @@ const Add = ({ token }) => {
       formData.append('category', form.category.value)
       formData.append('subCategory', form.subCategory.value)
   
-      // Append additional metadata about sizes
-      formData.append('availableSizes', JSON.stringify(selectedSizes))
-  
       // Append structured objects as JSON strings
       formData.append('details', JSON.stringify(details))
       formData.append('metadata', JSON.stringify(metadata))
@@ -115,6 +113,8 @@ const Add = ({ token }) => {
     } catch (error) {
       console.error('Error adding product:', error.response?.data || error)
       toast.error('Failed to add product')
+    } finally {
+      setIsSubmitting
     }
   }
 
@@ -294,7 +294,7 @@ const Add = ({ token }) => {
                         type="checkbox"
                         name="sizes"
                         value={size}
-                        className="hidden "
+                        className="hidden"
                         checked={selectedSizes.includes(size)}
                         onChange={(e) => {
                           if (e.target.checked) {
@@ -365,7 +365,20 @@ const Add = ({ token }) => {
           </div>
 
           <div className="flex justify-end">
-            <button type="submit" className="bg-primary mx-7 px-5 py-4 rounded-lg w-full font-semibold text-white text-lg">Add Product</button>
+            <button 
+              type="submit" 
+              disabled={isSubmitting}
+              className="bg-primary mx-7 px-5 py-4 rounded-lg w-full font-semibold text-white text-lg flex items-center justify-center"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 animate-spin" />
+                  Adding Product...
+                </>
+              ) : (
+                'Add Product'
+              )}
+            </button>
           </div>
         </form>
       </div>
