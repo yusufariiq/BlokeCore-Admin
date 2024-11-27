@@ -1,13 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Layout } from '../components/Layout'
-import { Upload } from 'lucide-react'
+import { Upload, X } from 'lucide-react'
+import axios from 'axios'
+import { backendUrl } from '../App'
+import { toast } from 'react-hot-toast'
 
 const CONDITIONS = ['Brand New', 'Excellent', 'Very Good', 'Good', 'Mint']
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
+const SUBCATEGORIES = {
+  clubs: ['English', 'Spain', 'France', 'German', 'Italy', 'Others'],
+  nations: ['Europe', 'Asia', 'America', 'Africa', 'Oceania'],
+  others: ['Basketball', 'Baseball'],
+}
 
-const Add = () => {
+const Add = ({ token }) => {
   const [selectedImages, setSelectedImages] = useState([null, null, null, null])
   const [selectedSizes, setSelectedSizes] = useState([])
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [subcategories, setSubcategories] = useState([]);
   
   const handleImageUpload = (index, event) => {
     const file = event.target.files[0]
@@ -24,11 +34,96 @@ const Add = () => {
     setSelectedImages(newImages)
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    // Handle form submission
-    console.log('Form submitted')
+  const handleCategoryChange = (e) => {
+    const category = e.target.value;
+    setSelectedCategory(category);
+    
+    if (SUBCATEGORIES[category]) {
+      setSubcategories(SUBCATEGORIES[category]);
+    } else {
+      setSubcategories([]);
+    }
   }
+
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault()
+      const formData = new FormData()
+  
+      // Image uploads
+      selectedImages.forEach((image, index) => {
+        if(image) {
+          formData.append(`image${index + 1}`, image)
+        }
+      })
+  
+      const form = e.target
+  
+      // Capitalize first letter of each word for condition
+      const formatCondition = (condition) => {
+        return condition
+          .split(' ')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+          .join(' ');
+      }
+  
+      // Structured details object
+      const details = {
+        year: form.year.value,
+        condition: formatCondition(form.condition.value), // Properly format condition
+        size: selectedSizes.length > 0 ? selectedSizes[0] : null, // Use first selected size
+        brand: form.brand.value,
+        type: form.type.value,
+        isAuthentic: form.isAuthentic.checked,
+        isVintage: form.isVintage.checked,
+        isLatest: form.isLatest.checked
+      }
+  
+      // Metadata object
+      const metadata = {
+        team: form.team.value,
+        league: form.league.value,
+        season: form.season.value
+      }
+  
+      // Append core fields
+      formData.append('name', form.name.value)
+      formData.append('description', form.description.value)
+      formData.append('price', form.price.value)
+      formData.append('category', form.category.value)
+      formData.append('subCategory', form.subCategory.value)
+  
+      // Append additional metadata about sizes
+      formData.append('availableSizes', JSON.stringify(selectedSizes))
+  
+      // Append structured objects as JSON strings
+      formData.append('details', JSON.stringify(details))
+      formData.append('metadata', JSON.stringify(metadata))
+  
+      const response = await axios.post(backendUrl + "/api/product/add", formData, {
+        headers: {
+          'Content-Type' : 'multipart/form-data',
+          'token': token
+        }
+      })
+      
+      console.log(response.data)
+      toast.success('Product added successfully')
+      e.target.reset()
+      setSelectedImages([null, null, null, null])
+      setSelectedSizes([])
+    } catch (error) {
+      console.error('Error adding product:', error.response?.data || error)
+      toast.error('Failed to add product')
+    }
+  }
+
+  useEffect(() => {
+    if (selectedCategory) {
+      const currentSubcategories = SUBCATEGORIES[selectedCategory] || {};
+      setSubcategories(currentSubcategories);
+    }
+  }, [selectedCategory]);
 
   return (
     <Layout>
@@ -55,8 +150,9 @@ const Add = () => {
                         <button
                           type="button"
                           onClick={() => removeImage(index)}
-                          className="btn btn-circle btn-xs absolute top-2 right-2 bg-error hover:bg-error-focus"
+                          className="absolute top-2 right-2"
                         >
+                          <X/>
                         </button>
                       </>
                     ) : (
@@ -67,6 +163,7 @@ const Add = () => {
                           type="file"
                           accept="image/*"
                           className="hidden"
+                          id={`image${index}`}
                           onChange={(e) => handleImageUpload(index, e)}
                         />
                       </label>
@@ -100,10 +197,17 @@ const Add = () => {
                   <label className="label">
                     <span className="label-text">Category</span>
                   </label>
-                  <select name="category" className="select select-bordered w-full" defaultValue={""} required>
-                    <option value="men">Men</option>
-                    <option value="women">Women</option>
-                    <option value="kids">Kids</option>
+                  <select 
+                    name="category" 
+                    className="select select-bordered w-full" 
+                    defaultValue={""} 
+                    required
+                    onChange={handleCategoryChange}
+                  >
+                    <option value="" disabled>Select Category</option>
+                    <option value="clubs">Clubs</option>
+                    <option value="nations">Nations</option>
+                    <option value="others">Others</option>
                   </select>
                 </div>
 
@@ -111,10 +215,22 @@ const Add = () => {
                   <label className="label">
                     <span className="label-text">Sub Category</span>
                   </label>
-                  <select name="subCategory" className="select select-bordered w-full" defaultValue={""} required>
-                    <option value="clubs">Clubs</option>
-                    <option value="nations">Nations</option>
-                    <option value="others">Others</option>
+                  <select 
+                    name="subCategory" 
+                    className="select select-bordered w-full" 
+                    defaultValue={""} 
+                    required
+                    disabled={!selectedCategory}
+                  >
+                    <option value="" disabled>Select Sub Category</option>
+                    {subcategories.map((subCategory) => (
+                      <option 
+                        key={subCategory.toLowerCase()} 
+                        value={subCategory.toLowerCase()}
+                      >
+                        {subCategory}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -199,19 +315,19 @@ const Add = () => {
               <div className="form-control">
                 <label className="label cursor-pointer">
                   <span className="label-text">Authentic Product</span> 
-                  <input type="checkbox" name="isAuthentic" className="checkbox checked:bg-primary" />
+                  <input type="checkbox" name="isAuthentic"/>
                 </label>
               </div>
               <div className="form-control">
                 <label className="label cursor-pointer">
                   <span className="label-text">Vintage Product</span> 
-                  <input type="checkbox" name="isVintage" className="checkbox checked:bg-primary" />
+                  <input type="checkbox" name="isVintage"/>
                 </label>
               </div>
               <div className="form-control">
                 <label className="label cursor-pointer">
                   <span className="label-text">Latest Product</span> 
-                  <input type="checkbox" name="isLatest" className="checkbox checked:bg-primary" />
+                  <input type="checkbox" name="isLatest"/>
                 </label>
               </div>
             </div>

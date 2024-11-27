@@ -41,7 +41,7 @@ function App() {
         {/* Protected routes */}
         <Route 
           path="/add" 
-          element={token ? <Add /> : <Navigate to="/login" replace />} 
+          element={token ? <Add token={token} /> : <Navigate to="/login" replace />} 
         />
         <Route 
           path="/list" 
