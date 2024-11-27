@@ -45,7 +45,7 @@ function App() {
         />
         <Route 
           path="/list" 
-          element={token ? <List /> : <Navigate to="/login" replace />} 
+          element={token ? <List token={token}/> : <Navigate to="/login" replace />} 
         />
         <Route 
           path="/orders" 
