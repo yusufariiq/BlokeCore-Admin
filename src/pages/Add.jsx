@@ -13,12 +13,64 @@ const SUBCATEGORIES = {
   others: ['Basketball', 'Baseball'],
 }
 
-const Add = ({ token }) => {
+const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
   const [selectedImages, setSelectedImages] = useState([null, null, null, null])
   const [selectedSizes, setSelectedSizes] = useState([])
   const [selectedCategory, setSelectedCategory] = useState('');
   const [subcategories, setSubcategories] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(false);
+  
+  useEffect(() => {
+    if (productToEdit) {
+      setIsEditMode(true)
+      // Populate form with existing product data
+      setSelectedCategory(productToEdit.category);
+      setSelectedSizes(productToEdit.details.size || []);
+      setSubcategories(SUBCATEGORIES[productToEdit.category] || []);
+
+      // Populate form fields
+      setTimeout(() => {
+        const form = document.querySelector('form');
+        form.name.value = productToEdit.name;
+        form.description.value = productToEdit.description;
+        form.category.value = productToEdit.category;
+        form.subCategory.value = productToEdit.subCategory;
+        form.price.value = productToEdit.price;
+        form.year.value = productToEdit.details.year;
+        form.condition.value = productToEdit.details.condition;
+        form.brand.value = productToEdit.details.brand;
+        form.type.value = productToEdit.details.type;
+        form.team.value = productToEdit.metadata.team;
+        form.league.value = productToEdit.metadata.league;
+        form.season.value = productToEdit.metadata.season;
+
+        // Set checkbox values
+        form.isAuthentic.checked = productToEdit.details.isAuthentic;
+        form.isVintage.checked = productToEdit.details.isVintage;
+        form.isLatest.checked = productToEdit.details.isLatest;
+
+        // Populate images if needed
+        if (productToEdit.images) {
+          const fetchAndConvertImages = async () => {
+            // Create a new array of 4 elements, fill with existing or null
+            const fetchedImages = await Promise.all(
+              Array(4).fill(null).map(async (_, index) => {
+                if (productToEdit.images[index]) {
+                  const response = await fetch(productToEdit.images[index]);
+                  const blob = await response.blob();
+                  return new File([blob], `image${index + 1}`, { type: 'image/jpeg' });
+                }
+                return null;
+              })
+            );
+            setSelectedImages(fetchedImages);
+          };
+          fetchAndConvertImages();
+        }
+      }, 100);
+    }
+  }, [productToEdit])
   
   const handleImageUpload = (index, event) => {
     const file = event.target.files[0]
@@ -49,6 +101,7 @@ const Add = ({ token }) => {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault()
+      setIsSubmitting(true)
       const formData = new FormData()
   
       // Image uploads
@@ -86,49 +139,52 @@ const Add = ({ token }) => {
         league: form.league.value,
         season: form.season.value
       }
-  
+
+      const url = isEditMode 
+        ? `${backendUrl}/api/product/update/${productToEdit.id}`
+        : `${backendUrl}/api/product/add`
+
       // Append core fields
       formData.append('name', form.name.value)
       formData.append('description', form.description.value)
       formData.append('price', form.price.value)
       formData.append('category', form.category.value)
       formData.append('subCategory', form.subCategory.value)
-  
+
       // Append structured objects as JSON strings
       formData.append('details', JSON.stringify(details))
       formData.append('metadata', JSON.stringify(metadata))
   
-      const response = await axios.post(backendUrl + "/api/product/add", formData, {
+      const response = await axios.post(url, formData, {
         headers: {
           'Content-Type' : 'multipart/form-data',
           'token': token
         }
       })
       
-      console.log(response.data)
-      toast.success('Product added successfully')
+      toast.success(isEditMode ? 'Product updated successfully' : 'Product added successfully')
+
       e.target.reset()
       setSelectedImages([null, null, null, null])
       setSelectedSizes([])
+    
+      if (isEditMode && onUpdateSuccess) {
+        onUpdateSuccess()
+      }
     } catch (error) {
-      console.error('Error adding product:', error.response?.data || error)
-      toast.error('Failed to add product')
+      console.error('Error processing product:', error.response?.data || error)
+      toast.error(isEditMode ? 'Failed to update product' : 'Failed to add product')
     } finally {
-      setIsSubmitting
+      setIsSubmitting(false)
     }
   }
-
-  useEffect(() => {
-    if (selectedCategory) {
-      const currentSubcategories = SUBCATEGORIES[selectedCategory] || {};
-      setSubcategories(currentSubcategories);
-    }
-  }, [selectedCategory]);
 
   return (
     <Layout>
       <div className="p-4 max-w-4xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Add New Product</h1>
+        <h1 className="text-2xl font-bold mb-6">
+          {isEditMode ? 'Edit Product' : 'Add New Product'}
+        </h1>
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Image Upload Section */}
           <div className="card">
@@ -263,7 +319,7 @@ const Add = ({ token }) => {
                   </label>
                   <select name="condition" className="select select-bordered w-full" defaultValue={""} required>
                     {CONDITIONS.map((condition) => (
-                      <option key={condition} value={condition.toLowerCase()}>{condition}</option>
+                        <option key={condition} value={condition}>{condition}</option>
                     ))}
                   </select>
                 </div>
@@ -373,10 +429,10 @@ const Add = ({ token }) => {
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 animate-spin" />
-                  Adding Product...
+                  {isEditMode ? 'Updating Product...' : 'Adding Product...'}
                 </>
               ) : (
-                'Add Product'
+                isEditMode ? 'Update Product' : 'Add Product'
               )}
             </button>
           </div>

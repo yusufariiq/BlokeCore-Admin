@@ -3,16 +3,18 @@ import { Layout } from '../components/Layout'
 import axios from 'axios'
 import { backendUrl } from '../App'
 import { toast } from 'react-hot-toast'
-import { Pen, Trash2 } from 'lucide-react'
+import { Pen, Trash2, X } from 'lucide-react'
 import { currency, formatIDR } from '../utils/utils'
+import Add from './Add'
 
 const List = ({token}) => {
   const [productList, setProductList] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [productToEdit, setProductToEdit] = useState(null)
 
   const fetchList = async () => {
     try {
-      const response = await axios.get(backendUrl + '/api/product/list');
-      console.log(response);
+      const response = await axios.get(`${backendUrl}/api/product/list`);
       if (response.data.success) {
         setProductList(response.data.product);
       } else {
@@ -22,6 +24,15 @@ const List = ({token}) => {
       console.log(error);
       toast.error(error.message)
     }
+  }
+
+   useEffect(() => {
+    fetchList()
+  }, [])
+
+  const handleEdit = (product) => {
+    setProductToEdit(product)
+    setIsModalOpen(true)
   }
 
   const removeProduct = async (id) => {
@@ -43,9 +54,11 @@ const List = ({token}) => {
     }
   }
 
-  useEffect(() => {
+  const handleUpdateSuccess = () => {
+    setIsModalOpen(false)
     fetchList()
-  }, [])
+    setProductToEdit(null)
+  }
 
   return (
     <Layout>
@@ -84,7 +97,7 @@ const List = ({token}) => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <button className="text-primary hover:text-hover-primary mr-3">
-                        <Pen size={18} />
+                        <Pen onClick={() => handleEdit(product)} size={18} />
                       </button>
                       <button onClick={() => removeProduct(product.id)} className="text-red-600 hover:text-red-900">
                         <Trash2 size={18} />
@@ -99,6 +112,27 @@ const List = ({token}) => {
           <p className="text-xl text-gray-600">There's no product</p>
         )}
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="relative bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <button 
+              onClick={() => {
+                setIsModalOpen(false)
+                setProductToEdit(null)
+              }} 
+              className="absolute top-4 right-4 z-10"
+            >
+              <X size={24} />
+            </button>
+            <Add 
+              token={token} 
+              productToEdit={productToEdit} 
+              onUpdateSuccess={handleUpdateSuccess}
+            />
+          </div>
+        </div>
+      )}
     </Layout>
   )
 }
