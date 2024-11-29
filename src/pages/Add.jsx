@@ -8,7 +8,7 @@ import { toast } from 'react-hot-toast'
 const CONDITIONS = ['Brand New', 'Excellent', 'Very Good', 'Good', 'Mint']
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
 const SUBCATEGORIES = {
-  clubs: ['English', 'Spain', 'France', 'German', 'Italy', 'Others'],
+  clubs: ['English', 'Spain', 'France', 'German', 'Italy', 'Others',],
   nations: ['Europe', 'Asia', 'America', 'Africa', 'Oceania'],
   others: ['Basketball', 'Baseball'],
 }
