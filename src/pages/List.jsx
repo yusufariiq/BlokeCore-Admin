@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Layout } from '../components/Layout'
 import axios from 'axios'
 import { backendUrl } from '../App'
 import { toast } from 'react-hot-toast'
@@ -61,7 +60,7 @@ const List = ({token}) => {
   }
 
   return (
-    <Layout>
+    <>
       <div className="py-4 px-4 sm:px-6 lg:px-8 mx-auto max-w-7xl">
         <h1 className="text-2xl font-bold mb-6">All Product List</h1>
         {productList.length > 0 ? (
@@ -133,7 +132,7 @@ const List = ({token}) => {
           </div>
         </div>
       )}
-    </Layout>
+    </>
   )
 }
 

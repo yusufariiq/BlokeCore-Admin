@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { Layout } from '../components/Layout'
 import { Upload, X, Loader2 } from 'lucide-react'
 import axios from 'axios'
 import { backendUrl } from '../App'
@@ -180,7 +179,7 @@ const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
   }
 
   return (
-    <Layout>
+    
       <div className="p-4 max-w-4xl mx-auto">
         <h1 className="text-2xl font-bold mb-6">
           {isEditMode ? 'Edit Product' : 'Add New Product'}
@@ -438,7 +437,7 @@ const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
           </div>
         </form>
       </div>
-    </Layout>
+    
   )
 }
 

@@ -7,6 +7,7 @@ import Orders from './pages/Orders';
 import Login from './components/Login';
 import { useState, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { Layout } from './components/Layout';
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL
 
@@ -25,33 +26,35 @@ function App() {
   return (
     <>
       <Toaster />
-      <Routes>
-        {/* If no token, redirect to login */}
-        <Route 
-          path="/" 
-          element={token ? <Home /> : <Navigate to="/login" replace />} 
-        />
-        
-        {/* Login route */}
-        <Route 
-          path="/login" 
-          element={<Login setToken={setToken} />} 
-        />
-        
-        {/* Protected routes */}
-        <Route 
-          path="/add" 
-          element={token ? <Add token={token} /> : <Navigate to="/login" replace />} 
-        />
-        <Route 
-          path="/list" 
-          element={token ? <List token={token}/> : <Navigate to="/login" replace />} 
-        />
-        <Route 
-          path="/orders" 
-          element={token ? <Orders /> : <Navigate to="/login" replace />} 
-        />
-      </Routes>
+      <Layout>
+        <Routes>
+          {/* If no token, redirect to login */}
+          <Route 
+            path="/" 
+            element={token ? <Home /> : <Navigate to="/login" replace />} 
+          />
+          
+          {/* Login route */}
+          <Route 
+            path="/login" 
+            element={<Login setToken={setToken} />} 
+          />
+          
+          {/* Protected routes */}
+          <Route 
+            path="/add" 
+            element={token ? <Add token={token} /> : <Navigate to="/login" replace />} 
+          />
+          <Route 
+            path="/list" 
+            element={token ? <List token={token}/> : <Navigate to="/login" replace />} 
+          />
+          <Route 
+            path="/orders" 
+            element={token ? <Orders /> : <Navigate to="/login" replace />} 
+          />
+        </Routes>
+      </Layout>
     </>
   )
 }
