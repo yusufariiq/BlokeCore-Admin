@@ -23,18 +23,20 @@ function App() {
     }
   }, [token]);
 
+  const ProtectedRoute = ({ children }) => {
+    return token ? (
+      <Layout>
+        {children}
+      </Layout>
+    ) : (
+      <Navigate to="/login" replace />
+    )
+  }
+
   return (
     <>
       <Toaster />
-      <Layout>
-        <Routes>
-          {/* If no token, redirect to login */}
-          <Route 
-            path="/" 
-            element={token ? <Home /> : <Navigate to="/login" replace />} 
-          />
-          
-          {/* Login route */}
+      <Routes>
           <Route 
             path="/login" 
             element={<Login setToken={setToken} />} 
@@ -42,19 +44,40 @@ function App() {
           
           {/* Protected routes */}
           <Route 
-            path="/add" 
-            element={token ? <Add token={token} /> : <Navigate to="/login" replace />} 
+            path="/" 
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            } 
           />
+          <Route 
+            path="/add" 
+            element={
+              <ProtectedRoute>
+                <Add token={token} />
+              </ProtectedRoute>
+            } 
+          />
+          
           <Route 
             path="/list" 
-            element={token ? <List token={token}/> : <Navigate to="/login" replace />} 
+            element={
+              <ProtectedRoute>
+                <List token={token} />
+              </ProtectedRoute>
+            } 
           />
+          
           <Route 
             path="/orders" 
-            element={token ? <Orders /> : <Navigate to="/login" replace />} 
+            element={
+              <ProtectedRoute>
+                <Orders />
+              </ProtectedRoute>
+            } 
           />
         </Routes>
-      </Layout>
     </>
   )
 }
