@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-
 # BlokeCore Admin Dashboard
-
-=======
-
-# MERN Stack
 
 The BlokeCore Admin Dashboard is a web application built with React for managing the BlokeCore online store. It enables administrators to oversee and control various aspects of the online store, such as product management, order tracking, and user data.
 
@@ -95,5 +89,3 @@ src/
 │   └── helpers.js
 └── main.jsx        # Main entry point
 ```
-
-> > > > > > > master
