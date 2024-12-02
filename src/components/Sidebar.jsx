@@ -1,7 +1,7 @@
 import React from 'react';
 import { LogOut, Package, Plus, ShoppingCart, X } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Assets } from '../assets/assets';
+import Assets from '../assets/assets';
 
 export function Sidebar({ onClose }) {
   const location = useLocation();

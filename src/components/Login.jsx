@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { backendUrl } from '../App'
 import { toast } from 'react-hot-toast'
+import Assets from '../assets/assets'
 
 const Login = ({ setToken }) => {
     const [email, setEmail] = useState('')
@@ -35,6 +36,7 @@ const Login = ({ setToken }) => {
         <div className="min-h-screen flex items-center justify-center bg-[#fdfdfd]">
             <div className="card w-full max-w-md border shadow-xl bg-white">
                 <div className="card-body">
+                    <img src={Assets.logoBlokecore2} alt="" className='h-12 my-4 mx-auto grayscale-100'/>
                     <p className="text-center text-3xl font-semibold mb-2">
                         Admin Panel
                     </p>
