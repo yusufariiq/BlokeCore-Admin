@@ -83,7 +83,7 @@ const Orders = ({token}) => {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center">
                     <Package className="mr-2 text-primary" />
-                    <span className="font-semibold">Order #{order._id?.slice(-6)}</span>
+                    <span className="font-medium">Order #{order._id?.slice(-6)}</span>
                   </div>
                   <select 
                     className="select select-bordered w-full max-w-[140px]"

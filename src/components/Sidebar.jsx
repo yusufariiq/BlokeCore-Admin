@@ -1,6 +1,7 @@
 import React from 'react';
 import { LogOut, Package, Plus, ShoppingCart, X } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Assets } from '../assets/assets';
 
 export function Sidebar({ onClose }) {
   const location = useLocation();
@@ -27,7 +28,7 @@ export function Sidebar({ onClose }) {
       <Link to={"/"} className="flex h-16 items-center gap-5 border-b border-zinc-800 px-4">
         <img
           alt=""
-          src="https://tailwindui.com/plus/img/logos/mark.svg?color=red&shade=600"
+          src={Assets.logoBlokecore}
           className="h-6 sm:h-8 w-auto"
         />
         <p className='text-xl font-semibold tracking-wider'>Dashboard</p>

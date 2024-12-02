@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Menu, X } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { Sidebar } from "./Sidebar";
+import Assets from "../assets/assets";
 
 export function Layout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -19,7 +20,7 @@ export function Layout({ children }) {
           <div className="flex flex-row space-x-5 ">
             <img
               alt=""
-              src="https://tailwindui.com/plus/img/logos/mark.svg?color=red&shade=600"
+              src={Assets.logoBlokecore}
               className="h-8 w-auto"
             />
             <p className="text-xl font-semibold text-white">Dashboard</p>
