@@ -1,5 +1,5 @@
 import React from 'react';
-import { LogOut, Package, Plus, ShoppingCart, X } from 'lucide-react';
+import { LayoutDashboard, LogOut, Package, Plus, ShoppingCart, X } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Assets from '../assets/assets';
 
@@ -25,18 +25,22 @@ export function Sidebar({ onClose }) {
       )}
 
       {/* Logo section */}
-      <Link to={"/"} className="flex h-16 items-center gap-5 border-b border-zinc-800 px-4">
+      <div className="flex h-16 items-center gap-5 border-b border-zinc-800 px-4">
         <img
           alt=""
           src={Assets.logoBlokecore}
           className="h-6 sm:h-8 w-auto"
         />
         <p className='text-xl font-semibold tracking-wider'>Dashboard</p>
-      </Link>
+      </div>
 
       {/* Nav section */}
       <nav className="flex-grow p-4 overflow-y-auto">
         <div className="flex flex-col gap-4">
+          <NavLink href="/" isActive={location.pathname === '/'}>
+            <LayoutDashboard className="mr-5" />
+            <p className='text-lg font-medium'>Dashboard</p>
+          </NavLink>
           <NavLink href="/add" isActive={location.pathname === '/add'}>
             <Plus className="mr-5" />
             <p className='text-lg font-medium'>Add Items</p>

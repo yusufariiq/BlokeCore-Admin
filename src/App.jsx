@@ -1,6 +1,5 @@
 import './App.css'
 import { Route, Routes, Navigate } from 'react-router-dom';
-import Home from './pages/Home';
 import Add from './pages/Add';
 import List from './pages/List';
 import Orders from './pages/Orders';
@@ -8,6 +7,7 @@ import Login from './components/Login';
 import { useState, useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { Layout } from './components/Layout';
+import Dashboard from './pages/Dashboard';
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL
 
@@ -47,7 +47,7 @@ function App() {
             path="/" 
             element={
               <ProtectedRoute>
-                <Home />
+                <Dashboard />
               </ProtectedRoute>
             } 
           />
