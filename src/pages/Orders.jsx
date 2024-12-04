@@ -108,9 +108,19 @@ const Orders = ({token}) => {
                     
                     <p className="text-gray-500">Payment:</p>
                     <p className='uppercase'>{order.paymentMethod}</p>
+                    
+                    <p className="text-gray-500">Shipping:</p>
+                    <p className='uppercase'>{order.selectedShipping}</p>
                   </div>
                  
                   <div className="grid grid-cols-2 gap-1">
+                    <p className="text-gray-500">Payment: </p>
+                    {!order.payment ? (
+                      <p className="font-medium text-primary">Unpaid</p>
+                      ) : (
+                      <p className="font-medium text-green-500">Paid</p>
+                    )}
+
                     <p className="text-gray-500">Name:</p>
                     <p className="font-medium">{order.shippingAddress.firstName + " " + order.shippingAddress.lastName}</p>
 
