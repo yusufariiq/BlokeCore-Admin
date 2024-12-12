@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutDashboard, LogOut, Package, Plus, ShoppingCart, X } from 'lucide-react';
+import { LayoutDashboard, LogOut, MessageCircle, Package, Plus, ShoppingCart, X } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Assets from '../assets/assets';
 
@@ -48,6 +48,10 @@ export function Sidebar({ onClose }) {
           <NavLink href="/list" isActive={location.pathname === '/list'}>
             <Package className="mr-5" />
             <p className='text-lg font-medium'>List Product</p>
+          </NavLink>
+          <NavLink href="/messages" isActive={location.pathname === '/messages'}>
+            <MessageCircle className="mr-5" />
+            <p className='text-lg font-medium'>Messages</p>
           </NavLink>
           <NavLink href="/orders" isActive={location.pathname === '/orders'}>
             <ShoppingCart className="mr-5" />

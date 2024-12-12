@@ -1,13 +1,13 @@
-import './App.css'
 import { Route, Routes, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
+import { Layout } from './components/Layout';
 import Add from './pages/Add';
 import List from './pages/List';
 import Orders from './pages/Orders';
 import Login from './components/Login';
-import { useState, useEffect } from 'react';
-import { Toaster } from 'react-hot-toast';
-import { Layout } from './components/Layout';
 import Dashboard from './pages/Dashboard';
+import Messages from './pages/Messages';
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL
 
@@ -65,6 +65,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <List token={token} />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/messages" 
+            element={
+              <ProtectedRoute>
+                <Messages />
               </ProtectedRoute>
             } 
           />
