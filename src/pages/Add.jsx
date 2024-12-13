@@ -23,12 +23,10 @@ const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
   useEffect(() => {
     if (productToEdit) {
       setIsEditMode(true)
-      // Populate form with existing product data
       setSelectedCategory(productToEdit.category);
       setSelectedSizes(productToEdit.details.size || []);
       setSubcategories(SUBCATEGORIES[productToEdit.category] || []);
 
-      // Populate form fields
       setTimeout(() => {
         const form = document.querySelector('form');
         form.name.value = productToEdit.name;
@@ -44,15 +42,12 @@ const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
         form.league.value = productToEdit.metadata.league;
         form.season.value = productToEdit.metadata.season;
 
-        // Set checkbox values
         form.isAuthentic.checked = productToEdit.details.isAuthentic;
         form.isVintage.checked = productToEdit.details.isVintage;
         form.isLatest.checked = productToEdit.details.isLatest;
 
-        // Populate images if needed
         if (productToEdit.images) {
           const fetchAndConvertImages = async () => {
-            // Create a new array of 4 elements, fill with existing or null
             const fetchedImages = await Promise.all(
               Array(4).fill(null).map(async (_, index) => {
                 if (productToEdit.images[index]) {
@@ -103,7 +98,6 @@ const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
       setIsSubmitting(true)
       const formData = new FormData()
   
-      // Image uploads
       selectedImages.forEach((image, index) => {
         if(image) {
           formData.append(`image${index + 1}`, image)
@@ -112,7 +106,6 @@ const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
   
       const form = e.target
   
-      // Capitalize first letter of each word for condition
       const formatCondition = (condition) => {
         return condition
           .split(' ')
@@ -120,7 +113,6 @@ const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
           .join(' ');
       }
   
-      // Structured details object
       const details = {
         year: form.year.value,
         condition: formatCondition(form.condition.value),
@@ -132,7 +124,6 @@ const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
         isLatest: form.isLatest.checked
       }
   
-      // Metadata object
       const metadata = {
         team: form.team.value,
         league: form.league.value,
@@ -143,21 +134,19 @@ const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
         ? `${backendUrl}/api/product/update/${productToEdit.id}`
         : `${backendUrl}/api/product/add`
 
-      // Append core fields
       formData.append('name', form.name.value)
       formData.append('description', form.description.value)
       formData.append('price', form.price.value)
       formData.append('category', form.category.value)
       formData.append('subCategory', form.subCategory.value)
 
-      // Append structured objects as JSON strings
       formData.append('details', JSON.stringify(details))
       formData.append('metadata', JSON.stringify(metadata))
   
       const response = await axios.post(url, formData, {
         headers: {
           'Content-Type' : 'multipart/form-data',
-          'token': token
+          'Authorization': `Bearer ${token}`
         }
       })
       
