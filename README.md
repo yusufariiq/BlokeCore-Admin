@@ -72,14 +72,15 @@ npm run dev
 src/
 ├── assets/         # Static assets (e.g., images, logos)
 ├── components/     # Reusable UI components
-│   ├── Navbar.jsx
+│   ├── Layout.jsx
 │   ├── Sidebar.jsx
 │   └── DashboardCard.jsx
 ├── pages/          # Page components
 │   ├── Products.jsx
 │   ├── Orders.jsx
 │   ├── Users.jsx
-│   └── Dashboard.jsx
+│   |── Dashboard.jsx
+│   └── Contact.jsx
 ├── routes/         # Route definitions
 │   └── index.jsx
 ├── services/       # API services
