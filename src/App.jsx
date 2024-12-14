@@ -14,7 +14,6 @@ export const backendUrl = import.meta.env.VITE_BACKEND_URL
 function App() {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
 
-  // Save token to localStorage whenever it changes
   useEffect(() => {
     if (token) {
       localStorage.setItem('token', token);

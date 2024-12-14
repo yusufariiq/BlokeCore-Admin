@@ -14,7 +14,6 @@ const Dashboard = () => {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    // Fetch stats from your Express backend
     const fetchStats = async () => {
       try {
         const response = await fetch(`${backendUrl}/api/stats`);
@@ -25,7 +24,6 @@ const Dashboard = () => {
       }
     };
 
-    // Fetch chart data from your Express backend
     const fetchChartData = async () => {
       try {
         const response = await fetch(`${backendUrl}/api/chart-data`);
