@@ -34,6 +34,7 @@ const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
         form.category.value = productToEdit.category;
         form.subCategory.value = productToEdit.subCategory;
         form.price.value = productToEdit.price;
+        form.stock.value = productToEdit.stock;
         form.year.value = productToEdit.details.year;
         form.condition.value = productToEdit.details.condition;
         form.brand.value = productToEdit.details.brand;
@@ -137,6 +138,7 @@ const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
       formData.append('name', form.name.value)
       formData.append('description', form.description.value)
       formData.append('price', form.price.value)
+      formData.append('stock', form.stock.value)
       formData.append('category', form.category.value)
       formData.append('subCategory', form.subCategory.value)
 
@@ -236,7 +238,7 @@ const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
                 <textarea name="description" placeholder="Write content here" className="textarea textarea-bordered h-24"></textarea>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="form-control w-full">
                   <label className="label">
                     <span className="label-text">Category</span>
@@ -280,9 +282,16 @@ const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
 
                 <div className="form-control w-full">
                   <label className="label">
+                    <span className="label-text">Stock</span>
+                  </label>
+                  <input type="number" name="stock" min="0" step="1" placeholder="Enter stock" className="input input-bordered w-full" required />
+                </div>
+                
+                <div className="form-control w-full">
+                  <label className="label">
                     <span className="label-text">Price</span>
                   </label>
-                  <input type="number" name="price" min="0" step="0.01" placeholder="Enter price" className="input input-bordered w-full" required />
+                  <input type="number" name="price" min="0" step="100" placeholder="Enter price" className="input input-bordered w-full" required />
                 </div>
               </div>
             </div>
