@@ -34,6 +34,7 @@ const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
         form.category.value = productToEdit.category;
         form.subCategory.value = productToEdit.subCategory;
         form.price.value = productToEdit.price;
+        form.discount.value = productToEdit.discount;
         form.stock.value = productToEdit.stock;
         form.year.value = productToEdit.details.year;
         form.condition.value = productToEdit.details.condition;
@@ -141,10 +142,12 @@ const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
       formData.append('stock', form.stock.value)
       formData.append('category', form.category.value)
       formData.append('subCategory', form.subCategory.value)
-
+      
       formData.append('details', JSON.stringify(details))
       formData.append('metadata', JSON.stringify(metadata))
-  
+      
+      formData.append('discount', form.discount.value)
+
       const response = await axios.post(url, formData, {
         headers: {
           'Content-Type' : 'multipart/form-data',
@@ -238,7 +241,7 @@ const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
                 <textarea name="description" placeholder="Write content here" className="textarea textarea-bordered h-24"></textarea>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="form-control w-full">
                   <label className="label">
                     <span className="label-text">Category</span>
@@ -286,12 +289,19 @@ const Add = ({ token, productToEdit = null, onUpdateSuccess }) => {
                   </label>
                   <input type="number" name="stock" min="0" step="1" placeholder="Enter stock" className="input input-bordered w-full" required />
                 </div>
-                
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="form-control w-full">
                   <label className="label">
                     <span className="label-text">Price</span>
                   </label>
                   <input type="number" name="price" min="0" step="100" placeholder="Enter price" className="input input-bordered w-full" required />
+                </div>
+                <div className="form-control w-full">
+                  <label className="label">
+                    <span className="label-text">Discount</span>
+                  </label>
+                  <input type="number" name="discount" min="0" max="100" placeholder="Enter discount" className="input input-bordered w-full" defaultValue="0" />
                 </div>
               </div>
             </div>
