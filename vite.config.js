@@ -8,7 +8,7 @@ export default defineConfig({
     port: 5174,
     proxy: {
       '/api': {
-        target: 'https://bloke-core-backend.vercel.app/',
+        target: 'https://bloke-core-backend.vercel.app',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '/api'),
       }
